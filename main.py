@@ -49,18 +49,18 @@ A = words.words()
 A5 = [K.lower() for K in A if len(K) == 5]
 # dynamic list
 words_list = [list(K) for K in A5]
-round1 = 0
+round = 0
 
-def prompt(round1=None):
-    if not round1:
+def prompt(round=None):
+    if not round:
         print("Wellcome to WORDLE !!!")
         prompt(True)
     else:
         # dynamic list
         global words_list
-        while round1 <= 5:
-            print("You left {} times guessing !".format(6 - round1))
-            round1 += 1
+        while round <= 5:
+            print("You left {} times guessing !".format(6 - round))
+            round += 1
             print("Skip(Enter) if not a word in the correct spot")
             spotA = input()
             if not spotA:
@@ -81,7 +81,7 @@ def prompt(round1=None):
                         words_list = renewDict(words_list, False, letter)
                     # print(len(words_list))
                     print("Go next round!!!")
-                    print("round1: ", round1)
+                    print("round: ", round)
                 else:
                     print('Enter(skip) then break')
                     break
@@ -91,10 +91,14 @@ def prompt(round1=None):
                     if letter != "-":
                         number += 1
                         if(number == 5):
+                            round = 6
+                            print("Good job !!! see you tomorrow.")
                             break
                         words_list = detectLetter(letter, words_list, idx)
                         print('The letter {} is in the word and in the {}th spot.'.format(letter, idx))
                 print(len(words_list))
+                if round == 6:
+                    break
                 print("Please input correct letters for renewing the Dict")
                 spotB = input()
                 if spotB:
@@ -111,12 +115,11 @@ def prompt(round1=None):
                         words_list = renewDict(words_list, False, letter)
                     # print(len(words_list))
                     print("Go next round!!!")
-                    print("round1: ", round1)
+                    print("round: ", round)
                 else:
                     print('Enter(skip) then break')
                     break
-            # prompt(round1)
-    print("Good job")
+            # prompt(round)
     
 
 
