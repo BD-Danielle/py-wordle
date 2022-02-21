@@ -27,7 +27,7 @@ def renewDict(result, bool, letter):
         return result
     else:
         keep = [K for K in result if letter not in K]
-        print(keep, len(keep), "words have been kept!!!")
+        print(keep, len(keep), "word(s) have been kept!!!")
         return keep
 
 
@@ -79,7 +79,6 @@ def prompt(round=None):
                 if spotC:
                     for idx, letter in enumerate(list(spotC)):
                         words_list = renewDict(words_list, False, letter)
-                    # print(len(words_list))
                     print("Go next round!!!")
                     print("round: ", round)
                 else:
@@ -96,8 +95,9 @@ def prompt(round=None):
                             break
                         words_list = detectLetter(letter, words_list, idx)
                         print('The letter {} is in the word and in the {}th spot.'.format(letter, idx))
-                print(len(words_list))
+                print("Just left", len(words_list), "word(s) to choose!")
                 if round == 6:
+                    print("Keeping fighting, see you tomorrow")
                     break
                 print("Please input correct letters for renewing the Dict")
                 spotB = input()
@@ -113,13 +113,11 @@ def prompt(round=None):
                 if spotC:
                     for idx, letter in enumerate(list(spotC)):
                         words_list = renewDict(words_list, False, letter)
-                    # print(len(words_list))
                     print("Go next round!!!")
                     print("round: ", round)
                 else:
                     print('Enter(skip) then break')
                     break
-            # prompt(round)
     
 
 
