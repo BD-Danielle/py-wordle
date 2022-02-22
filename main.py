@@ -26,9 +26,7 @@ def renewDict(result, bool, letter):
     if bool:
         return result
     else:
-        keep = [K for K in result if letter not in K]
-        print(keep, len(keep), "word(s) have been kept!!!")
-        return keep
+        return [K for K in result if letter not in K]
 
 
 def detectLetter(letter, reference, idx=None):
@@ -58,67 +56,63 @@ def prompt(round=None):
     else:
         # dynamic list
         global words_list
-        while round <= 5:
+        while round < 7:
             print("You left {} times guessing !".format(6 - round))
             round += 1
-            print("Skip(Enter) if not a word in the correct spot")
-            spotA = input()
+            spotA = input("Skip(Enter) if not a word in the correct spot: ")
             if not spotA:
-                print("Oops, all the letters are not in any spot.")
-                print("Please input correct letters for renewing the Dict")
-                spotB = input()
+                spotB = input("Oops, all the letters are not in any spot.\nPlease input correct letters for renewing the Dict: ")
                 if spotB:
                     print("We will renew the Dict")
                     for idx, letter in enumerate(list(spotB)):
                         words_list = detectLetter(letter, words_list)
+                        print(words_list, len(words_list), "word(s) have been kept!!!")
                 else:
                     print('Enter(skip) then break')
                 # The letters are not in the word in any spot.
-                print("Please input incorrect letters for renewing the Dict")
-                spotC = input()
+                spotC = input("Please input incorrect letters for renewing the Dict: ")
                 if spotC:
                     for idx, letter in enumerate(list(spotC)):
                         words_list = renewDict(words_list, False, letter)
+                        print(words_list, len(words_list), "word(s) have been kept!!!")
                     print("Go next round!!!")
                     print("round: ", round)
                 else:
-                    print('Enter(skip) then break')
+                    input('Enter(skip) then break...')
                     break
             else:
                 number = 0
                 for idx, letter in enumerate(list(spotA)):
                     if letter != "-":
                         number += 1
-                        if(number == 5):
-                            round = 6
-                            print("Good job !!! see you tomorrow.")
-                            break
                         words_list = detectLetter(letter, words_list, idx)
                         print('The letter {} is in the word and in the {}th spot.'.format(letter, idx))
-                print("Just left", len(words_list), "word(s) to choose!")
-                if round == 6:
-                    print("Keeping fighting, see you tomorrow")
+                if(number == 5):
+                    round = 6
+                    print("Good job !!! see you tomorrow.")
                     break
-                print("Please input correct letters for renewing the Dict")
-                spotB = input()
+                print("Just left", len(words_list), "word(s) to choose!")
+                spotB = input("Please input correct letters for renewing the Dict: ")
                 if spotB:
-                    print("We will renew the Dict")
+                    print("We will renew the Dict...")
                     for idx, letter in enumerate(list(spotB)):
                         words_list = detectLetter(letter, words_list)
+                    print(words_list, len(words_list), "word(s) have been kept!!!")
                 else:
-                    print('Enter(skip) then break')
+                    print('Enter(skip) then break...')
                 # The letters are not in the word in any spot.
-                print("Please input incorrect letters for renewing the Dict")
-                spotC = input()
+                spotC = input("Please input incorrect letters for renewing the Dict: ")
                 if spotC:
                     for idx, letter in enumerate(list(spotC)):
                         words_list = renewDict(words_list, False, letter)
                     print("Go next round!!!")
                     print("round: ", round)
                 else:
-                    print('Enter(skip) then break')
+                    print('Enter(skip) then break...')
                     break
-    
+                if round > 7:
+                    print("Keeping fighting, see you tomorrow")
+                    break     
 
 
 prompt()
