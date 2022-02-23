@@ -2,8 +2,6 @@
 
 # import nltk
 # nltk.download('words')
-import re
-from pickle import TRUE
 from nltk.corpus import words
 
 # print(type(words.words()))
@@ -22,24 +20,17 @@ from nltk.corpus import words
 # spill -> ['s-ill', ()] del 1 letter 'p'
 # renew list
 # swill -> ['swill', ()] del 0 letter
-def renewDict(result, bool, letter):
-    if bool:
-        return result
+def renew_dict(input, reference, letter, idx=None, bool=None):
+    if not input:
+        return reference
     else:
-        return [K for K in result if letter not in K]
-
-
-def detectLetter(letter, reference, idx=None):
-    if letter:
         if idx:
-            result = [K for K in reference if letter in K[idx]]
-        else:
-            result = [K for K in reference if letter in K]
-        if result:
-            return renewDict(result, True, letter)
-        else:
-            return renewDict(result, False, letter)
+            return [K for K in reference if letter == K[idx]]
+        if bool:
+            return [K for K in reference if letter not in K]
+        return [K for K in reference if letter in K]
 
+    
 # global A
 # global A5
 # global words_list
@@ -63,17 +54,18 @@ def prompt(round=None):
             if not spotA:
                 spotB = input("Oops, all the letters are not in any spot.\nPlease input correct letters for renewing the Dict: ")
                 if spotB:
-                    print("We will renew the Dict")
+                    print("We will renew the Dict", spotB)
                     for idx, letter in enumerate(list(spotB)):
-                        words_list = detectLetter(letter, words_list)
+                        words_list = renew_dict(spotB, words_list, letter)
                         print(words_list, len(words_list), "word(s) have been kept!!!")
                 else:
+                    print(words_list, len(words_list), "word(s) have been kept!!!")
                     print('Enter(skip) then break')
                 # The letters are not in the word in any spot.
                 spotC = input("Please input incorrect letters for renewing the Dict: ")
                 if spotC:
                     for idx, letter in enumerate(list(spotC)):
-                        words_list = renewDict(words_list, False, letter)
+                        words_list = renew_dict(spotC, words_list, letter, None, True)
                         print(words_list, len(words_list), "word(s) have been kept!!!")
                     print("Go next round!!!")
                     print("round: ", round)
@@ -85,26 +77,28 @@ def prompt(round=None):
                 for idx, letter in enumerate(list(spotA)):
                     if letter != "-":
                         number += 1
-                        words_list = detectLetter(letter, words_list, idx)
+                        words_list = renew_dict(spotA, words_list, letter, idx)
                         print('The letter {} is in the word and in the {}th spot.'.format(letter, idx))
                 if(number == 5):
                     round = 6
                     print("Good job !!! see you tomorrow.")
                     break
-                print("Just left", len(words_list), "word(s) to choose!")
+                print(words_list, len(words_list), "word(s) have been kept!!!")
                 spotB = input("Please input correct letters for renewing the Dict: ")
                 if spotB:
                     print("We will renew the Dict...")
                     for idx, letter in enumerate(list(spotB)):
-                        words_list = detectLetter(letter, words_list)
+                        words_list = renew_dict(spotB, words_list, letter)
                     print(words_list, len(words_list), "word(s) have been kept!!!")
                 else:
+                    print(words_list, len(words_list), "word(s) have been kept!!!")
                     print('Enter(skip) then break...')
                 # The letters are not in the word in any spot.
                 spotC = input("Please input incorrect letters for renewing the Dict: ")
                 if spotC:
                     for idx, letter in enumerate(list(spotC)):
-                        words_list = renewDict(words_list, False, letter)
+                        words_list = renew_dict(spotC, words_list, letter, None, True)
+                    print(words_list, len(words_list), "word(s) have been kept!!!")
                     print("Go next round!!!")
                     print("round: ", round)
                 else:
