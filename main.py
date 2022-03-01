@@ -24,23 +24,21 @@ def feedback(times=None):
                 if c.lower() == feedback[i].lower():
                     words_ = [K for K in words_ if c in K]
                     if feedback[i].isupper():
-                        print("61: ", feedback[i])
                         reserved.append(feedback[i].lower())
-                        print("63 reserved: ", reserved)
-                        words_ = [K for K in words_ if K[i] == c.lower()]
+                        print("28 c:", c)
+                        words_ = [K for K in words_ if K[i] == c]
                     elif feedback[i].islower():
-                        print("66: ", feedback[i])
+                        print("30: ", feedback[i])
                         reserved.append(feedback[i])
-                        print("68 reserved: ", reserved)
+                        print("32 reserved: ", reserved)
                         words_ = [K for K in words_ if c in K and K[i] != c]
                 else:
                     if feedback[i] == "-":
-                        print("72 reserved: ", reserved)
                         unreserved.append(c)
                         intersection = list(set(unreserved) & set(reserved))
-                        print("40 unreserved: ", unreserved)
-                        words_ = [K for K in words_ if c in K and c not in intersection]
+                        print("40 intersection: ", intersection)
+                        print("41 unreserved: ", unreserved)
+                        words_ = [K for K in words_ if c in reserved or c not in K]
                         continue
             print(words_)
-
 feedback(0)
