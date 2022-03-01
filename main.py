@@ -1,5 +1,12 @@
 # -*- coding:utf-8 -*-
 
+# please type the word: thorn
+# please type the result: T-Or-
+# Unreserved:  ['h']
+# Reserved letter(s):  ['t', 'o', 'r']
+# Unreserved letter(s):  ['h', 'n']
+# hint(s): ['troad', 'troat', 'troca', 'trock', 'troco', 'trode', 'troft', 'trogs', 'troic', 'troke', 'troll', 'tromp', 'troop', 'troot', 'trope', 'trout', 'trove']
+
 from nltk.corpus import words
 
 Words_ = [K.lower() for K in words.words() if len(K) == 5]
@@ -34,6 +41,5 @@ def feedback(times=None):
                         # print("40 intersection: ", intersection)
                         print("41 Unreserved: ", Unreserved)
                         Words_ = [K for K in Words_ if c in Reserved or c not in K]
-                        continue
             print(Words_)
 feedback(0)
