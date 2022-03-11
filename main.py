@@ -17,9 +17,7 @@ def feedback(times=None):
         print("You left {} time(s) guessing !".format(7 - times))
         word = input("please type the word: ")
         feedback = input("please type the result: ")
-        word_ = list(set([k for k in word.lower()]))
-        feedback_ = list(set([k for k in feedback.lower()]))
-        intersection = list(set(word_) & set(feedback_))
+        intersection = list(set([k for k in word.lower()]) & set([k for k in feedback.lower()]))
         if word.upper() == feedback.upper():
             print("Good job, see you tomorrow.")
             break
