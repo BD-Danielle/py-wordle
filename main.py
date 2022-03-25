@@ -6,7 +6,8 @@
 # Reserved letter(s):  ['t', 'o', 'r']
 # Unreserved letter(s):  ['h', 'n']
 # hint(s): ['troad', 'troat', 'troca', 'trock', 'troco', 'trode', 'troft', 'trogs', 'troic', 'troke', 'troll', 'tromp', 'troop', 'troot', 'trope', 'trout', 'trove']
-
+import nltk
+nltk.download('words')
 from nltk.corpus import words
 
 
