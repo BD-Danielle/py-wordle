@@ -13,7 +13,7 @@ from nltk.corpus import words
 
 def feedback(times=None):
     Words_ = [K.lower() for K in words.words() if len(K) == 5]
-    while times < 7:
+    while times < 6:
         times += 1
         print("You left {} time(s) guessing !".format(7 - times))
         word = input("please type the word: ")
@@ -34,4 +34,6 @@ def feedback(times=None):
                     if feedback[i] == "-":
                         Words_ = [K for K in Words_ if c in intersection or c not in K]
             print(Words_)
+    print("Oops, see you tomorrow.")
+
 feedback(0)
