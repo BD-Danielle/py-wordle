@@ -1,18 +1,15 @@
 # -*- coding:utf-8 -*-
 
-# please type the word: thorn
-# please type the result: T-Or-
-# Unreserved:  ['h']
-# Reserved letter(s):  ['t', 'o', 'r']
-# Unreserved letter(s):  ['h', 'n']
-# hint(s): ['troad', 'troat', 'troca', 'trock', 'troco', 'trode', 'troft', 'trogs', 'troic', 'troke', 'troll', 'tromp', 'troop', 'troot', 'trope', 'trout', 'trove']
-import nltk
-nltk.download('words')
-from nltk.corpus import words
-
+# please type the word: these
+# please type the result: theS-
+# You left 5 time(s) guessing!
+# ['heist']
 
 def feedback(times=None):
-    Words_ = [K.lower() for K in words.words() if len(K) == 5]
+    # Words_ = [K.lower() for K in words.words() if len(K) == 5]
+    with open('words_alpha.txt', 'r') as txt:
+        txt_ = txt.read().splitlines()
+        Words_ = [K.lower() for K in txt_ if len(K) == 5]
     while times < 6:
         times += 1
         print("You left {} time(s) guessing !".format(7 - times))
