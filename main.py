@@ -16,7 +16,7 @@ def feedback(times=None):
         word = input("please type the word: ")
         feedback = input("please type the result: ")
         intersection = list(set([k for k in word.lower()]) & set([k for k in feedback.lower()]))
-        if word.upper() == feedback.upper():
+        if word.upper() == feedback:
             print("Good job, see you tomorrow.")
             break
         else:
