@@ -1,2 +1,2 @@
 nltk
-nltk.download('words')
+requests
