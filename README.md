@@ -8,6 +8,20 @@
 - 優先推薦常用的五字母單詞
 - 提供互動式的遊戲體驗
 
+## 目錄結構
+
+```
+py-wordle/
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── ai.main.py
+├── screenshots/          # 截圖目錄
+│   ├── test_case1.png
+│   ├── test_case2.png
+│   └── ...
+└── venv/
+
 ## 安裝指南
 
 ### 1. 克隆倉庫
