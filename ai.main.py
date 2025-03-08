@@ -5,15 +5,13 @@ def get_word_frequency() -> Set[str]:
     """返回常用5字母单词集合"""
     common_words = [
         'about', 'other', 'which', 'their', 'there', 'first', 'would', 'these', 'click', 'price',
-        'state', 'email', 'world', 'music', 'after', 'video', 'where', 'books', 'links', 'years',
-        'order', 'items', 'group', 'under', 'games', 'could', 'great', 'hotel', 'store', 'terms',
-        'right', 'local', 'those', 'using', 'phone', 'forum', 'based', 'black', 'check', 'index',
-        'being', 'women', 'today', 'south', 'pages', 'found', 'house', 'photo', 'power', 'while',
-        'three', 'total', 'place', 'think', 'north', 'posts', 'media', 'water', 'since', 'guide',
-        'board', 'white', 'small', 'times', 'sites', 'level', 'hours', 'image', 'title', 'shall',
-        'class', 'still', 'money', 'every', 'visit', 'tools', 'reply', 'value', 'press', 'learn',
-        'print', 'stock', 'point', 'sales', 'large', 'table', 'start', 'model', 'human', 'movie',
-        'march', 'yahoo', 'going', 'study', 'staff', 'again', 'april', 'never', 'users', 'topic',
+        'where', 'world', 'music', 'after', 'video', 'email', 'water', 'paper', 'light', 'write',
+        'order', 'place', 'group', 'under', 'game', 'could', 'great', 'hotel', 'real', 'think',
+        'right', 'local', 'phone', 'guide', 'book', 'black', 'check', 'date', 'being', 'women',
+        'today', 'heart', 'page', 'found', 'free', 'life', 'home', 'while', 'media', 'print',
+        'three', 'total', 'learn', 'plant', 'cover', 'quick', 'price', 'human', 'water', 'money',
+        'board', 'white', 'month', 'major', 'night', 'above', 'level', 'image', 'earth', 'young',
+        'happy', 'every', 'baby', 'party', 'green', 'money', 'clear', 'dream', 'large', 'drink',
         'patio', 'audio', 'radio', 'piano', 'daily', 'paint', 'paper', 'happy', 'party', 'train'
     ]
     return set(word.lower() for word in common_words if len(word) == 5)
@@ -54,10 +52,17 @@ def get_best_guesses(candidates: List[str], used_letters: Dict) -> List[str]:
 
 def process_feedback(word: str, feedback: str, candidate: str) -> bool:
     """处理单个候选词是否符合反馈规则"""
+    # 首先检查灰色字母
+    for i, (guess_char, feedback_char) in enumerate(zip(word, feedback)):
+        if (feedback_char == '-' or feedback_char == '_') and \
+           guess_char not in feedback.lower() and \
+           guess_char in candidate:
+            return False
+    
     temp_candidate = list(candidate)
     temp_word = list(word)
     
-    # 首先处理绿色字母（完全匹配）
+    # 处理绿色字母
     for i, (guess_char, feedback_char) in enumerate(zip(word, feedback)):
         if feedback_char.isupper():  # 绿色
             if candidate[i] != guess_char:
@@ -65,7 +70,7 @@ def process_feedback(word: str, feedback: str, candidate: str) -> bool:
             temp_candidate[i] = '*'
             temp_word[i] = '*'
     
-    # 然后处理黄色字母（位置错误但存在）
+    # 处理黄色字母
     for i, (guess_char, feedback_char) in enumerate(zip(temp_word, feedback)):
         if guess_char == '*':
             continue
@@ -73,15 +78,13 @@ def process_feedback(word: str, feedback: str, candidate: str) -> bool:
             if guess_char not in temp_candidate or candidate[i] == guess_char:
                 return False
             temp_candidate[temp_candidate.index(guess_char)] = '*'
-        elif feedback_char == '-':  # 灰色
-            if guess_char in temp_candidate and not (guess_char in word and (guess_char in feedback.lower())):
-                return False
     
     return True
 
 def feedback(guess_attempts: int = 0) -> None:
     """主要游戏逻辑函数"""
     candidate_words = get_word_list()
+    excluded_letters = set()  # 用于跟踪所有灰色字母
     
     while guess_attempts < 6:
         print(f"\n还剩 {6 - guess_attempts} 次机会!")
@@ -93,26 +96,44 @@ def feedback(guess_attempts: int = 0) -> None:
             guess_attempts -= 1
             continue
             
-        feedback = input("请输入反馈结果 (大写=绿色, 小写=黄色, '-'=灰色): ")
-        if len(feedback) != 5:
+        feedback_str = input("请输入反馈结果 (大写=绿色, 小写=黄色, '-'=灰色): ")
+        if len(feedback_str) != 5:
             print("反馈必须是5个字符！")
             guess_attempts -= 1
             continue
             
-        if word == feedback.lower():
+        if word == feedback_str.lower():
             print("恭喜你猜对了！明天见。")
             break
-            
+        
+        # 更新已排除的字母
+        for i, (letter, fb) in enumerate(zip(word, feedback_str)):
+            # 如果是灰色（'-'或'_'）且该字母不在黄色或绿色位置中
+            if (fb == '-' or fb == '_') and letter not in feedback_str.lower():
+                excluded_letters.add(letter)
+        
         # 筛选候选词
-        new_candidates = [candidate for candidate in candidate_words 
-                         if process_feedback(word, feedback, candidate)]
+        new_candidates = []
+        for candidate in candidate_words:
+            # 首先检查是否包含已排除的字母
+            if any(letter in candidate for letter in excluded_letters):
+                continue
+            if process_feedback(word, feedback_str, candidate):
+                new_candidates.append(candidate)
         
         candidate_words = new_candidates
         print(f"可能的单词数量: {len(candidate_words)}")
+        print(f"已排除的字母: {', '.join(sorted(excluded_letters))}")
         
         if candidate_words:
-            best_guesses = get_best_guesses(candidate_words, {})
-            print("建议尝试以下单词:", best_guesses)
+            # 从候选词中过滤掉包含已排除字母的单词
+            valid_candidates = [w for w in candidate_words 
+                              if not any(letter in w for letter in excluded_letters)]
+            best_guesses = get_best_guesses(valid_candidates, {})
+            if best_guesses:
+                print("建议尝试以下单词:", best_guesses[:5])
+            else:
+                print("没有找到合适的推荐单词")
         else:
             print("警告：没有找到匹配的单词，可能是反馈输入有误")
             guess_attempts -= 1
